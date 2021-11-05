@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="task_1_is_done">false</bool>
+    <bool name="task_4_is_done">false</bool>
+    <bool name="task_3_is_done">false</bool>
+    <bool name="task_2_is_done">true</bool>
+    <bool name="is_landscape">true</bool>
+
+</resources>
