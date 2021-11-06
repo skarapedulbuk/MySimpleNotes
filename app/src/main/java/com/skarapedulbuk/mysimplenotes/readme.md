@@ -1,0 +1,2 @@
+getContext возвращает Context, но может вернуть null, а requireContext не может, выбросит исключение IllegalStateException.
+getActivity возвращает FragmentActivity, но может вернуть null, а requireActivity не может, выбросит исключение IllegalStateException.
