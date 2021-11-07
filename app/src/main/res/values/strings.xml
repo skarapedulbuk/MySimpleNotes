@@ -14,10 +14,16 @@
     <string name="completed">Completed</string>
     <string name="uncompleted">Uncompleted</string>
     <string name="filter">Filter</string>
-    <string name="Settings">Настройки</string>
+    <string name="settings">Настройки</string>
     <string name="btn_add_func">Дополнительно</string>
     <string name="btn_base_func">Базово</string>
     <string name="checkbox_base">Базовый функционал</string>
     <string name="checkbox_additional">Дополнительный фунцкционал</string>
     <string name="welcome">Добро пожаловать!</string>
+    <string name="add_task">Добавить</string>
+    <string name="action_about">О программе</string>
+    <string name="toolbar_title">Тулбар</string>
+    <string name="list_toolbar_title">Меню списка</string>
+    <string name="action_share">Поделиться</string>
+    <string name="details_toolbar_title">Тулбар деталей</string>
 </resources>
