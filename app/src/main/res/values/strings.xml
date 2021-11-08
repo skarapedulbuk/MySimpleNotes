@@ -7,7 +7,7 @@
     <string name="description4">Здесь что то написано</string>
     <string name="task4">Купить слона</string>
     <string name="task3">Сделать уроки</string>
-    <string name="task2">Приготовить ужин</string>
+    <string name="task2">Приготовить ужин и еще еды на завтра</string>
     <string name="tasks">Задачи</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
@@ -22,8 +22,14 @@
     <string name="welcome">Добро пожаловать!</string>
     <string name="add_task">Добавить</string>
     <string name="action_about">О программе</string>
-    <string name="toolbar_title">Тулбар</string>
-    <string name="list_toolbar_title">Меню списка</string>
+    <string name="toolbar_title">Начальный экран</string>
+    <string name="list_toolbar_title">Список задач</string>
     <string name="action_share">Поделиться</string>
-    <string name="details_toolbar_title">Тулбар деталей</string>
+    <string name="details_toolbar_title">Детали задачи</string>
+    <string name="action_clear_all">Очистить всё</string>
+    <string name="action_edit">Редактировать</string>
+    <string name="action_delete">Удалить</string>
+    <string name="all">All</string>
+    <string name="undone">Undone</string>
+    <string name="done">Done</string>
 </resources>
