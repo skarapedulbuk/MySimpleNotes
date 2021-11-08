@@ -44,4 +44,12 @@
             android:textSize="@dimen/details_description_text_size"
             tools:text="@string/description2" />
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/default_margin"
+        android:contentDescription="@string/edit"
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
