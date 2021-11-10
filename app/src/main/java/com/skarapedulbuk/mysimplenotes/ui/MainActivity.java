@@ -1,9 +1,11 @@
 package com.skarapedulbuk.mysimplenotes.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -52,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements Drawer {
     }
 
     public void showSettingsNotChild() {
-       /* getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_container, new SettingsFragment())
-                .addToBackStack("Settings")
-                .commit();*/
         if (getSupportFragmentManager().findFragmentByTag("Settings") == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.main_container, new SettingsFragment(), "Settings")
@@ -67,5 +65,26 @@ public class MainActivity extends AppCompatActivity implements Drawer {
                     .commit();
             Toast.makeText(this, "Скрываю настройки", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Нажата системная кнопка назад", Toast.LENGTH_SHORT).show();
+        showExitDialog(this);
+    }
+
+    private void showExitDialog(Context context) {
+        new AlertDialog.Builder(this)
+                .setTitle("Выход")
+                .setMessage("Вы действительно хотите выйти?")
+                .setIcon(R.drawable.ic_baseline_anchor_24)
+                .setCancelable(false)
+                .setPositiveButton("Да", (dialog, which) -> {
+                    Toast.makeText(context, "Выход подтвержден", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .setNegativeButton("Нет", (dialog, which) ->
+                        Toast.makeText(context, "Отмена", Toast.LENGTH_SHORT).show())
+                .show();
     }
 }
