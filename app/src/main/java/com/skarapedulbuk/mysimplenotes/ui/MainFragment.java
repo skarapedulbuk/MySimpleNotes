@@ -19,8 +19,8 @@ import com.skarapedulbuk.mysimplenotes.ui.list.ListFragment;
 import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 
 public class MainFragment extends Fragment {
-    Boolean isBaseChecked;
-    Boolean isAddChecked;
+    private Boolean isBaseChecked;
+    private Boolean isAddChecked;
     SettingsStorage settingsStorage;
 
     public MainFragment() {
@@ -60,11 +60,11 @@ public class MainFragment extends Fragment {
         isBaseChecked = settingsBundle.getBoolean(SettingsStorage.ARG_BASE_CHECKBOX, false);
         isAddChecked = settingsBundle.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
 
-        Button btn_base = view.findViewById(R.id.btn_base_func);
-        Button btn_add = view.findViewById(R.id.btn_add_func);
+        Button buttonBase = view.findViewById(R.id.btn_base_func);
+        Button buttonAdd = view.findViewById(R.id.btn_add_func);
 
-        btn_base.setEnabled(isBaseChecked);
-        btn_add.setEnabled(isAddChecked);
+        buttonBase.setEnabled(isBaseChecked);
+        buttonAdd.setEnabled(isAddChecked);
 
         getChildFragmentManager().setFragmentResultListener(
                 SettingsFragment.KEY_RESULT,
@@ -74,8 +74,8 @@ public class MainFragment extends Fragment {
                     isBaseChecked = result.getBoolean(SettingsStorage.ARG_BASE_CHECKBOX, false);
                     isAddChecked = result.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
 
-                    btn_base.setEnabled(isBaseChecked);
-                    btn_add.setEnabled(isAddChecked);
+                    buttonBase.setEnabled(isBaseChecked);
+                    buttonAdd.setEnabled(isAddChecked);
 
                 }
         );
