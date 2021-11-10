@@ -1,6 +1,9 @@
 package com.skarapedulbuk.mysimplenotes.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -8,8 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.SettingsStorage;
 import com.skarapedulbuk.mysimplenotes.ui.list.ListFragment;
@@ -25,8 +28,31 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            showHideSettingsFragment();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        initToolbarMenu(view);
 
         settingsStorage = new SettingsStorage(super.requireContext());
         Bundle settingsBundle = settingsStorage.getSettings();
@@ -43,34 +69,63 @@ public class MainFragment extends Fragment {
         getChildFragmentManager().setFragmentResultListener(
                 SettingsFragment.KEY_RESULT,
                 getViewLifecycleOwner(),
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                (requestKey, result) -> {
 
-                        isBaseChecked = result.getBoolean(SettingsStorage.ARG_BASE_CHECKBOX, false);
-                        isAddChecked = result.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
+                    isBaseChecked = result.getBoolean(SettingsStorage.ARG_BASE_CHECKBOX, false);
+                    isAddChecked = result.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
 
-                        btn_base.setEnabled(isBaseChecked);
-                        btn_add.setEnabled(isAddChecked);
+                    btn_base.setEnabled(isBaseChecked);
+                    btn_add.setEnabled(isAddChecked);
 
-                    }
                 }
         );
 
         view.findViewById(R.id.btn_settings).setOnClickListener(v ->
-                getChildFragmentManager().beginTransaction() // здесь, как указано в задании, используем getChildFragmentManager, хотя напрашивается, конечно, диалог
-                        .add(R.id.child_container, new SettingsFragment(), "Settings")
-                        .commit()
+                showHideSettingsFragment()
         );
 
         view.findViewById(R.id.btn_base_func).setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
-                        .add(R.id.main_container, new ListFragment())
+                        .replace(R.id.main_container, new ListFragment())
                         .addToBackStack("List")
-                        .commitAllowingStateLoss());
+                        .commit()
+        );
 
         view.findViewById(R.id.btn_add_func).setOnClickListener(v ->
-            Toast.makeText(requireContext(), R.string.checkbox_additional, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.checkbox_additional, Toast.LENGTH_SHORT).show()
         );
+    }
+
+    private void initToolbarMenu(View view) {
+        MaterialToolbar toolbar = view.findViewById(R.id.main_fragment_toolbar);
+        if (getActivity() instanceof Drawer) {
+            Drawer drawer = (Drawer) getActivity();
+            drawer.setToolbar(toolbar);
+        }
+
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_settings) {
+                showHideSettingsFragment();
+            }
+            if (item.getItemId() == R.id.action_about) {
+                Toast.makeText(requireContext(), R.string.action_about, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        });
+    }
+
+    public void showHideSettingsFragment() {
+        if (getChildFragmentManager().findFragmentByTag("Settings") == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.child_container, new SettingsFragment(), "Settings")
+                    .commit();
+            Toast.makeText(requireContext(), "Показываю настройки", Toast.LENGTH_SHORT).show();
+        } else {
+            getChildFragmentManager().beginTransaction()
+                    .remove(getChildFragmentManager().findFragmentByTag("Settings"))
+                    .commit();
+            Toast.makeText(requireContext(), "Скрываю настройки", Toast.LENGTH_SHORT).show();
+        }
     }
 }
