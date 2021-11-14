@@ -3,7 +3,6 @@ package com.skarapedulbuk.mysimplenotes.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -41,14 +40,6 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            showHideSettingsFragment();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -66,8 +57,8 @@ public class MainFragment extends Fragment {
         buttonBase.setEnabled(isBaseChecked);
         buttonAdd.setEnabled(isAddChecked);
 
-        getChildFragmentManager().setFragmentResultListener(
-                SettingsFragment.KEY_RESULT,
+        getParentFragmentManager().setFragmentResultListener(
+                SettingsFragment.TAG,
                 getViewLifecycleOwner(),
                 (requestKey, result) -> {
 
@@ -81,7 +72,9 @@ public class MainFragment extends Fragment {
         );
 
         view.findViewById(R.id.btn_settings).setOnClickListener(v ->
-                showHideSettingsFragment()
+                // showHideSettingsFragment()
+                SettingsFragment.newInstance()
+                        .show(getParentFragmentManager(), SettingsFragment.TAG)
         );
 
         view.findViewById(R.id.btn_base_func).setOnClickListener(v ->
@@ -105,7 +98,9 @@ public class MainFragment extends Fragment {
 
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_settings) {
-                showHideSettingsFragment();
+                //showHideSettingsFragment();
+                SettingsFragment.newInstance()
+                        .show(getParentFragmentManager(), SettingsFragment.TAG);
             }
             if (item.getItemId() == R.id.action_about) {
                 Toast.makeText(requireContext(), R.string.action_about, Toast.LENGTH_SHORT).show();

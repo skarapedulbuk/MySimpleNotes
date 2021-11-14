@@ -6,17 +6,21 @@ import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.SettingsStorage;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends DialogFragment {
 
-    public static final String KEY_RESULT = "KEY_RESULT";
+    public static final String TAG = "SettingsFragment";
 
     public SettingsFragment() {
         super(R.layout.fragment_settings);
+    }
+
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
     }
 
     @Override
@@ -36,7 +40,7 @@ public class SettingsFragment extends Fragment {
 
             settingsBundle.putBoolean(SettingsStorage.ARG_BASE_CHECKBOX, checkBoxBase.isChecked());
             settingsStorage.setSettings(settingsBundle);
-            getParentFragmentManager().setFragmentResult(KEY_RESULT, settingsBundle);
+            getParentFragmentManager().setFragmentResult(TAG, settingsBundle);
 
         });
 
@@ -44,7 +48,7 @@ public class SettingsFragment extends Fragment {
 
             settingsBundle.putBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, checkBoxAdd.isChecked());
             settingsStorage.setSettings(settingsBundle);
-            getParentFragmentManager().setFragmentResult(KEY_RESULT, settingsBundle);
+            getParentFragmentManager().setFragmentResult(TAG, settingsBundle);
 
         });
 

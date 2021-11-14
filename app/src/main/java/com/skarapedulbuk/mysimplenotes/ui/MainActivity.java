@@ -1,5 +1,6 @@
 package com.skarapedulbuk.mysimplenotes.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 public class MainActivity extends AppCompatActivity implements Drawer {
     DrawerLayout drawerLayout;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +28,13 @@ public class MainActivity extends AppCompatActivity implements Drawer {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        navigationView.setBackgroundColor(R.color.purple_700);
         navigationView.setNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.action_settings) {
-                Toast.makeText(this, "запуск SettinsFragment в основном контейнере", Toast.LENGTH_SHORT).show();
-                showSettingsNotChild();
+                Toast.makeText(this, "запуск SettinsFragment в диалоге", Toast.LENGTH_SHORT).show();
+                SettingsFragment.newInstance()
+                        .show(getSupportFragmentManager(), SettingsFragment.TAG);
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -51,20 +55,6 @@ public class MainActivity extends AppCompatActivity implements Drawer {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0); // непонятно зачем строковые ресурсы
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-    }
-
-    public void showSettingsNotChild() {
-        if (getSupportFragmentManager().findFragmentByTag("Settings") == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_container, new SettingsFragment(), "Settings")
-                    .commit();
-            Toast.makeText(this, "Показываю настройки", Toast.LENGTH_SHORT).show();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(getSupportFragmentManager().findFragmentByTag("Settings"))
-                    .commit();
-            Toast.makeText(this, "Скрываю настройки", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
