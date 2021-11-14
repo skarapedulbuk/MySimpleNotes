@@ -13,7 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/menu_details_fragment"
-            app:navigationIcon="@drawable/ic_baseline_arrow_back_ios_new_24"
             app:title="@string/details_toolbar_title" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -45,11 +44,11 @@
             tools:text="@string/description2" />
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add_task"
+        android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/default_margin"
-        android:contentDescription="@string/edit"
-        app:srcCompat="@drawable/ic_baseline_edit_24" />
+        android:contentDescription="@string/back"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
