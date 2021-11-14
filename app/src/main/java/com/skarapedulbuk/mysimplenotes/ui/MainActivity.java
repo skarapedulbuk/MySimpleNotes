@@ -1,9 +1,12 @@
 package com.skarapedulbuk.mysimplenotes.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -16,6 +19,7 @@ import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 public class MainActivity extends AppCompatActivity implements Drawer {
     DrawerLayout drawerLayout;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +28,13 @@ public class MainActivity extends AppCompatActivity implements Drawer {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        navigationView.setBackgroundColor(R.color.purple_700);
         navigationView.setNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == R.id.action_settings) {
-                Toast.makeText(this, "запуск SettinsFragment в основном контейнере", Toast.LENGTH_SHORT).show();
-                showSettingsNotChild();
+                Toast.makeText(this, "запуск SettinsFragment в диалоге", Toast.LENGTH_SHORT).show();
+                SettingsFragment.newInstance()
+                        .show(getSupportFragmentManager(), SettingsFragment.TAG);
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -51,21 +57,24 @@ public class MainActivity extends AppCompatActivity implements Drawer {
         toggle.syncState();
     }
 
-    public void showSettingsNotChild() {
-       /* getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_container, new SettingsFragment())
-                .addToBackStack("Settings")
-                .commit();*/
-        if (getSupportFragmentManager().findFragmentByTag("Settings") == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_container, new SettingsFragment(), "Settings")
-                    .commit();
-            Toast.makeText(this, "Показываю настройки", Toast.LENGTH_SHORT).show();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(getSupportFragmentManager().findFragmentByTag("Settings"))
-                    .commit();
-            Toast.makeText(this, "Скрываю настройки", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Нажата системная кнопка назад", Toast.LENGTH_SHORT).show();
+        showExitDialog(this);
+    }
+
+    private void showExitDialog(Context context) {
+        new AlertDialog.Builder(this)
+                .setTitle("Выход")
+                .setMessage("Вы действительно хотите выйти?")
+                .setIcon(R.drawable.ic_baseline_anchor_24)
+                .setCancelable(false)
+                .setPositiveButton("Да", (dialog, which) -> {
+                    Toast.makeText(context, "Выход подтвержден", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .setNegativeButton("Нет", (dialog, which) ->
+                        Toast.makeText(context, "Отмена", Toast.LENGTH_SHORT).show())
+                .show();
     }
 }

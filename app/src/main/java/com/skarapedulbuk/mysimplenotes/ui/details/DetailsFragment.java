@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.MyTask;
 import com.skarapedulbuk.mysimplenotes.ui.Drawer;
@@ -45,7 +46,12 @@ public class DetailsFragment extends Fragment {
 
         CheckedTextView title = view.findViewById(R.id.task_title);
         TextView description = view.findViewById(R.id.task_description);
-
+        FloatingActionButton editButton = view.findViewById(R.id.btn_back);
+        editButton.setOnClickListener(v -> {
+                    Toast.makeText(requireContext(), "Назад", Toast.LENGTH_SHORT).show();
+                    getParentFragmentManager().popBackStack();
+                }
+        );
         if (getArguments() != null && getArguments().containsKey(ARG_TASK)) {
 
             MyTask task = getArguments().getParcelable(ARG_TASK);
@@ -83,13 +89,5 @@ public class DetailsFragment extends Fragment {
             }
             return super.onOptionsItemSelected(item);
         });
-
-        toolbar.setNavigationOnClickListener(v -> {
-                    Toast.makeText(requireContext(), "Назад", Toast.LENGTH_SHORT).show();
-                    getParentFragmentManager().popBackStack();
-                }
-        );
     }
-
-
 }
