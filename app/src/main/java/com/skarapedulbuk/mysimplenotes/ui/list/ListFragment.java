@@ -22,8 +22,10 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.InmemoryTasksRepository;
 import com.skarapedulbuk.mysimplenotes.domain.MyTask;
+import com.skarapedulbuk.mysimplenotes.domain.SettingsStorage;
 import com.skarapedulbuk.mysimplenotes.ui.Drawer;
 import com.skarapedulbuk.mysimplenotes.ui.details.DetailsFragment;
+import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class ListFragment extends Fragment implements ListView {
 
     private LinearLayout tasksListRoot;
     private ListPresenter presenter;
+    private BottomNavigationView bottomNavigationView;
+    private Boolean isAddChecked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +57,22 @@ public class ListFragment extends Fragment implements ListView {
         tasksListRoot = view.findViewById(R.id.list_root);
         presenter.requestTasks();
 
+        SettingsStorage settingsStorage = new SettingsStorage(super.requireContext());
+        isAddChecked = settingsStorage.getSettings().getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
+
         initBottomMenu(view);
         initToolbarMenu(view);
+
+        setBottomMenuVisibility(isAddChecked);
+
+        getParentFragmentManager().setFragmentResultListener(
+                SettingsFragment.TAG,
+                getViewLifecycleOwner(),
+                (requestKey, result) -> {
+                    isAddChecked = result.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
+                    setBottomMenuVisibility(isAddChecked);
+                }
+        );
 
         getParentFragmentManager().setFragmentResultListener(ListFragment.KEY_LIST_ACTIVITY,
                 this,
@@ -72,6 +90,14 @@ public class ListFragment extends Fragment implements ListView {
 
                     }
                 });
+    }
+
+    private void setBottomMenuVisibility(Boolean bottomMenuVisibility) {
+        if (bottomMenuVisibility) {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     private void initToolbarMenu(View view) {
@@ -99,17 +125,10 @@ public class ListFragment extends Fragment implements ListView {
             }
             return super.onOptionsItemSelected(item);
         });
-
-        //кнопка назад на тулбаре не видна, но ее действие выполняется вместо выезжаения дроера
-      /*  toolbar.setNavigationOnClickListener(v -> {
-                    Toast.makeText(requireContext(), "Назад", Toast.LENGTH_SHORT).show();
-                    getParentFragmentManager().popBackStack();
-                });*/
-
     }
 
     private void initBottomMenu(View view) {
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_nav_menu);
+        bottomNavigationView = view.findViewById(R.id.bottom_nav_menu);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
