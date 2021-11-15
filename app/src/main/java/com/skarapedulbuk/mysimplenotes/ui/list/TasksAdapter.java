@@ -17,8 +17,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder> {
+    interface OnTaskClicked {
+        void onTaskClicked(MyTask task);
+    }
 
     private ArrayList<MyTask> tasks = new ArrayList<>();
+
+    public void setTaskClicked(OnTaskClicked taskClicked) {
+        this.taskClicked = taskClicked;
+    }
+
+    private OnTaskClicked taskClicked;
+
+    public OnTaskClicked getTaskClicked() {
+        return taskClicked;
+    }
 
     public void setTasks(Collection<MyTask> toSet) {
         tasks.clear();
@@ -58,6 +71,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
             editButton = itemView.findViewById(R.id.edit_button);
             editButton.setOnClickListener(v -> {
                 Toast.makeText(v.getContext(), "Edit", Toast.LENGTH_SHORT).show();
+                if (getTaskClicked() != null) {
+                    getTaskClicked().onTaskClicked(tasks.get(getAdapterPosition()));
+                }
+
             });
         }
     }

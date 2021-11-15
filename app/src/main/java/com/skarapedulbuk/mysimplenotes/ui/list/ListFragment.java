@@ -44,6 +44,18 @@ public class ListFragment extends Fragment implements ListView {
 
         presenter = new ListPresenter(this, new InmemoryTasksRepository());
         adapter = new TasksAdapter();
+
+        adapter.setTaskClicked(new TasksAdapter.OnTaskClicked() {
+            @Override
+            public void onTaskClicked(MyTask task) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_TASK, task);
+
+                getParentFragmentManager()
+                        .setFragmentResult(KEY_LIST_ACTIVITY, bundle);
+            }
+        });
+
         presenter.requestTasks();
 
     }

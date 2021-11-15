@@ -2,8 +2,8 @@ package com.skarapedulbuk.mysimplenotes.ui.details;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckedTextView;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,10 +44,12 @@ public class DetailsFragment extends Fragment {
 
         initToolbarMenu(view);
 
-        CheckedTextView title = view.findViewById(R.id.task_title);
-        TextView description = view.findViewById(R.id.task_description);
-        FloatingActionButton editButton = view.findViewById(R.id.btn_back);
-        editButton.setOnClickListener(v -> {
+        CheckBox checkBox = view.findViewById(R.id.task_checkbox);
+        EditText title = view.findViewById(R.id.task_title);
+        EditText description = view.findViewById(R.id.task_description);
+        FloatingActionButton backButton = view.findViewById(R.id.btn_back);
+
+        backButton.setOnClickListener(v -> {
                     Toast.makeText(requireContext(), "Назад", Toast.LENGTH_SHORT).show();
                     getParentFragmentManager().popBackStack();
                 }
@@ -58,7 +60,7 @@ public class DetailsFragment extends Fragment {
 
             title.setText(task.getTaskTitle());
             description.setText(task.getTaskDescription());
-            title.setChecked(getResources().getBoolean(task.getTaskIsDone()));
+            checkBox.setChecked(getResources().getBoolean(task.getTaskIsDone()));
 
         }
 
@@ -71,7 +73,7 @@ public class DetailsFragment extends Fragment {
 
                         title.setText(task1.getTaskTitle());
                         description.setText(task1.getTaskDescription());
-                        title.setChecked(getResources().getBoolean(task1.getTaskIsDone()));
+                        checkBox.setChecked(getResources().getBoolean(task1.getTaskIsDone()));
 
                     }
                 });
@@ -86,6 +88,12 @@ public class DetailsFragment extends Fragment {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_share) {
                 Toast.makeText(requireContext(), "Поделиться", Toast.LENGTH_SHORT).show();
+            }
+            if (item.getItemId() == R.id.action_save) {
+                Toast.makeText(requireContext(), "Сохранить", Toast.LENGTH_SHORT).show();
+            }
+            if (item.getItemId() == R.id.action_delete) {
+                Toast.makeText(requireContext(), "Удалить", Toast.LENGTH_SHORT).show();
             }
             return super.onOptionsItemSelected(item);
         });
