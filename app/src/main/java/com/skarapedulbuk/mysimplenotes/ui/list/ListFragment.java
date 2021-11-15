@@ -5,25 +5,24 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.InmemoryTasksRepository;
 import com.skarapedulbuk.mysimplenotes.domain.MyTask;
+import com.skarapedulbuk.mysimplenotes.domain.SettingsStorage;
 import com.skarapedulbuk.mysimplenotes.ui.Drawer;
 import com.skarapedulbuk.mysimplenotes.ui.details.DetailsFragment;
+import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 
 import java.util.List;
 
@@ -32,14 +31,33 @@ public class ListFragment extends Fragment implements ListView {
     public static final String KEY_LIST_ACTIVITY = "KEY_LIST_ACTIVITY";
     public static final String ARG_TASK = "ARG_TASK";
 
-    private LinearLayout tasksListRoot;
+    private RecyclerView tasksListRoot;
     private ListPresenter presenter;
+    private BottomNavigationView bottomNavigationView;
+    private Boolean isAddChecked;
+
+    private TasksAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         presenter = new ListPresenter(this, new InmemoryTasksRepository());
+        adapter = new TasksAdapter();
+
+        adapter.setTaskClicked(new TasksAdapter.OnTaskClicked() {
+            @Override
+            public void onTaskClicked(MyTask task) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_TASK, task);
+
+                getParentFragmentManager()
+                        .setFragmentResult(KEY_LIST_ACTIVITY, bundle);
+            }
+        });
+
+        presenter.requestTasks();
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,10 +69,29 @@ public class ListFragment extends Fragment implements ListView {
         super.onViewCreated(view, savedInstanceState);
 
         tasksListRoot = view.findViewById(R.id.list_root);
-        presenter.requestTasks();
+        /*tasksListRoot.setLayoutManager(new LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false));*/
+
+        tasksListRoot.setAdapter(adapter);
+
+        SettingsStorage settingsStorage = new SettingsStorage(super.requireContext());
+        isAddChecked = settingsStorage.getSettings().getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
 
         initBottomMenu(view);
         initToolbarMenu(view);
+
+        setBottomMenuVisibility(isAddChecked);
+
+        getParentFragmentManager().setFragmentResultListener(
+                SettingsFragment.TAG,
+                getViewLifecycleOwner(),
+                (requestKey, result) -> {
+                    isAddChecked = result.getBoolean(SettingsStorage.ARG_ADDITIONAL_CHECKBOX, false);
+                    setBottomMenuVisibility(isAddChecked);
+                }
+        );
 
         getParentFragmentManager().setFragmentResultListener(ListFragment.KEY_LIST_ACTIVITY,
                 this,
@@ -72,6 +109,14 @@ public class ListFragment extends Fragment implements ListView {
 
                     }
                 });
+    }
+
+    private void setBottomMenuVisibility(Boolean bottomMenuVisibility) {
+        if (bottomMenuVisibility) {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     private void initToolbarMenu(View view) {
@@ -99,17 +144,10 @@ public class ListFragment extends Fragment implements ListView {
             }
             return super.onOptionsItemSelected(item);
         });
-
-        //кнопка назад на тулбаре не видна, но ее действие выполняется вместо выезжаения дроера
-      /*  toolbar.setNavigationOnClickListener(v -> {
-                    Toast.makeText(requireContext(), "Назад", Toast.LENGTH_SHORT).show();
-                    getParentFragmentManager().popBackStack();
-                });*/
-
     }
 
     private void initBottomMenu(View view) {
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_nav_menu);
+        bottomNavigationView = view.findViewById(R.id.bottom_nav_menu);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -136,7 +174,11 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void showTasks(List<MyTask> tasks) {
-        for (MyTask task : tasks
+
+        adapter.setTasks(tasks);
+        adapter.notifyDataSetChanged();
+
+       /* for (MyTask task : tasks
         ) {
             View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_task, tasksListRoot, false);
             FloatingActionButton editButton = itemView.findViewById(R.id.edit_button);
@@ -174,6 +216,6 @@ public class ListFragment extends Fragment implements ListView {
             title.setChecked(getResources().getBoolean(task.getTaskIsDone()));
 
             tasksListRoot.addView(itemView);
-        }
+        }*/
     }
 }
