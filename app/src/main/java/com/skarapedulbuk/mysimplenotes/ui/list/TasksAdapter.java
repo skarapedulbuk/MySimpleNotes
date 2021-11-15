@@ -4,10 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skarapedulbuk.mysimplenotes.R;
 import com.skarapedulbuk.mysimplenotes.domain.MyTask;
 
@@ -44,10 +46,19 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     class TasksViewHolder extends RecyclerView.ViewHolder {
 
         CheckBox titleCheckBox;
+        FloatingActionButton editButton;
 
         public TasksViewHolder(@NonNull View itemView) {
             super(itemView);
             titleCheckBox = itemView.findViewById(R.id.checkbox_of_task);
+            titleCheckBox.setOnClickListener(v -> {
+                Toast.makeText(v.getContext(), "Item View Click", Toast.LENGTH_SHORT).show();
+            });
+
+            editButton = itemView.findViewById(R.id.edit_button);
+            editButton.setOnClickListener(v -> {
+                Toast.makeText(v.getContext(), "Edit", Toast.LENGTH_SHORT).show();
+            });
         }
     }
 }
