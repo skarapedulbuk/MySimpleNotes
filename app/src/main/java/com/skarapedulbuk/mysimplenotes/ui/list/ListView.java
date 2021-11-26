@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ListView {
     void showTasks(List<MyTask> tasks);
+
+    void clearTasks();
 }

@@ -25,11 +25,6 @@ public class InmemoryTasksRepository implements TasksRepository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(400L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 result.add(new MyTask(R.string.task1, R.string.description1, R.bool.task_1_is_done));
                 result.add(new MyTask(R.string.task2, R.string.description2, R.bool.task_2_is_done));
@@ -50,6 +45,11 @@ public class InmemoryTasksRepository implements TasksRepository {
 
     @Override
     public void clear(Callback<Void> callback) {
-
+        executor.execute(() -> {
+            result.clear();
+            mainThreadHandler.post(()->{
+               callback.onSuccess(null);
+            });
+        });
     }
 }

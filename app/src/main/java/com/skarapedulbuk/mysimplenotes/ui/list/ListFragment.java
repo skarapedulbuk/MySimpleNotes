@@ -24,6 +24,7 @@ import com.skarapedulbuk.mysimplenotes.ui.Drawer;
 import com.skarapedulbuk.mysimplenotes.ui.details.DetailsFragment;
 import com.skarapedulbuk.mysimplenotes.ui.options.SettingsFragment;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -132,6 +133,7 @@ public class ListFragment extends Fragment implements ListView {
             }
             if (item.getItemId() == R.id.action_clear_all) {
                 Toast.makeText(requireContext(), R.string.action_clear_all, Toast.LENGTH_SHORT).show();
+                presenter.removeAll();
                 return true;
             }
             if (item.getItemId() == R.id.action_search) {
@@ -217,5 +219,11 @@ public class ListFragment extends Fragment implements ListView {
 
             tasksListRoot.addView(itemView);
         }*/
+    }
+
+    @Override
+    public void clearTasks() {
+        adapter.setTasks(Collections.emptyList());
+        adapter.notifyDataSetChanged();
     }
 }

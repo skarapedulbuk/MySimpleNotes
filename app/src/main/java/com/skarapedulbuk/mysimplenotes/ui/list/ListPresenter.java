@@ -29,4 +29,18 @@ public class ListPresenter {
             }
         });
     }
+
+    public void removeAll() {
+        repository.clear(new Callback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                view.clearTasks();
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+    }
 }
