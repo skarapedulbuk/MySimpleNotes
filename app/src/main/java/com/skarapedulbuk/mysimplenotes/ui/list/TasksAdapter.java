@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder> {
+    public void addTask(MyTask result) {
+        tasks.add(result);
+    }
+
     interface OnTaskClicked {
         void onTaskClicked(MyTask task);
     }
@@ -51,6 +55,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
         MyTask task = tasks.get(position);
         holder.titleCheckBox.setText(task.getTaskTitle());
         holder.descriptionTextView.setText(task.getTaskDescription());
+        holder.titleCheckBox.setChecked(task.getTaskIsDone());
     }
 
     @Override

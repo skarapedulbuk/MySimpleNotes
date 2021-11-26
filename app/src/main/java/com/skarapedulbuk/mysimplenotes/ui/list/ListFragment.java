@@ -129,6 +129,7 @@ public class ListFragment extends Fragment implements ListView {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_add) {
                 Toast.makeText(requireContext(), R.string.add_task, Toast.LENGTH_SHORT).show();
+                presenter.add(getString(R.string.task3),getString(R.string.description3), false);
                 return true;
             }
             if (item.getItemId() == R.id.action_clear_all) {
@@ -176,54 +177,22 @@ public class ListFragment extends Fragment implements ListView {
 
     @Override
     public void showTasks(List<MyTask> tasks) {
-
         adapter.setTasks(tasks);
         adapter.notifyDataSetChanged();
-
-       /* for (MyTask task : tasks
-        ) {
-            View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_task, tasksListRoot, false);
-            FloatingActionButton editButton = itemView.findViewById(R.id.edit_button);
-            editButton.setOnClickListener(v -> {
-
-                PopupMenu popupMenu = new PopupMenu(requireContext(), editButton);
-
-                requireActivity().getMenuInflater().inflate(R.menu.menu_action_popup, popupMenu.getMenu());
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.popup_delete) {
-                            Toast.makeText(requireContext(), "Удаляем задачу из попап меню", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (item.getItemId() == R.id.popup_edit) {
-                            Toast.makeText(requireContext(), "Редактируем задачу из попап меню", Toast.LENGTH_SHORT).show();
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable(ARG_TASK, task);
-
-                            getParentFragmentManager()
-                                    .setFragmentResult(KEY_LIST_ACTIVITY, bundle);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                });
-
-                popupMenu.show();
-            });
-
-            CheckBox title = itemView.findViewById(R.id.checkbox_of_task);
-            title.setText(task.getTaskTitle());
-            title.setChecked(getResources().getBoolean(task.getTaskIsDone()));
-
-            tasksListRoot.addView(itemView);
-        }*/
     }
 
     @Override
     public void clearTasks() {
         adapter.setTasks(Collections.emptyList());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addTask(MyTask result) {
+        adapter.addTask(result);
+
+        adapter.notifyItemInserted(adapter.getItemCount() - 1);
+
+        tasksListRoot.smoothScrollToPosition(adapter.getItemCount() - 1);
     }
 }

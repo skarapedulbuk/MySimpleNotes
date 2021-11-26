@@ -43,4 +43,18 @@ public class ListPresenter {
             }
         });
     }
+
+    public void add(String title, String description, boolean b) {
+        repository.add(title, description, b, new Callback<MyTask>() {
+            @Override
+            public void onSuccess(MyTask result) {
+                view.addTask(result);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+    }
 }

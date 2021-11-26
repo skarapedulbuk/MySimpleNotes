@@ -1,47 +1,53 @@
 package com.skarapedulbuk.mysimplenotes.domain;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.BoolRes;
-import androidx.annotation.StringRes;
+import androidx.annotation.RequiresApi;
 
 public class MyTask implements Parcelable {
 
-    @StringRes
+    /*@StringRes
     private final int taskTitle;
 
     @StringRes
     private final int taskDescription;
 
     @BoolRes
-    private final int taskIsDone;
+    private final int taskIsDone;*/
 
-    public int getTaskTitle() {
+    private String taskTitle;
+    private String taskDescription;
+    private Boolean taskIsDone;
+
+    public String getTaskTitle() {
         return taskTitle;
     }
 
-    public int getTaskDescription() {
+    public String getTaskDescription() {
         return taskDescription;
     }
 
-    public int getTaskIsDone() {
+    public Boolean getTaskIsDone() {
         return taskIsDone;
     }
 
-    public MyTask(int taskTitle, int taskDescription, int taskIsDone) {
+    public MyTask(String taskTitle, String taskDescription, Boolean taskIsDone) {
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
         this.taskIsDone = taskIsDone;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     protected MyTask(Parcel in) {
-        taskTitle = in.readInt();
-        taskDescription = in.readInt();
-        taskIsDone = in.readInt();
+        taskTitle = in.readString();
+        taskDescription = in.readString();
+        taskIsDone = in.readBoolean();
     }
 
     public static final Creator<MyTask> CREATOR = new Creator<MyTask>() {
+        @RequiresApi(api = Build.VERSION_CODES.Q)
         @Override
         public MyTask createFromParcel(Parcel in) {
             return new MyTask(in);
@@ -58,10 +64,11 @@ public class MyTask implements Parcelable {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(taskTitle);
-        dest.writeInt(taskDescription);
-        dest.writeInt(taskIsDone);
+        dest.writeString(taskTitle);
+        dest.writeString(taskDescription);
+        dest.writeBoolean(taskIsDone);
     }
 }

@@ -60,7 +60,7 @@ public class DetailsFragment extends Fragment {
 
             title.setText(task.getTaskTitle());
             description.setText(task.getTaskDescription());
-            checkBox.setChecked(getResources().getBoolean(task.getTaskIsDone()));
+            checkBox.setChecked(task.getTaskIsDone());
 
         }
 
@@ -73,7 +73,7 @@ public class DetailsFragment extends Fragment {
 
                         title.setText(task1.getTaskTitle());
                         description.setText(task1.getTaskDescription());
-                        checkBox.setChecked(getResources().getBoolean(task1.getTaskIsDone()));
+                        checkBox.setChecked(task1.getTaskIsDone());
 
                     }
                 });

@@ -4,8 +4,6 @@ package com.skarapedulbuk.mysimplenotes.domain;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.skarapedulbuk.mysimplenotes.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,23 +20,14 @@ public class InmemoryTasksRepository implements TasksRepository {
     @Override
     public void getTasks(Callback<List<MyTask>> callback) {
 
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
+        executor.execute(() -> {
+            result.add(new MyTask("Название1", "Описание1", true));
+            result.add(new MyTask("Название2", "Описание2 Описание2 Описание2 Описание2 Описание2", false));
+            result.add(new MyTask("Название3", "Описание3", true));
+            result.add(new MyTask("Название4", "Описание4", false));
+            result.add(new MyTask("Название5", "Описание5", true));
 
-                result.add(new MyTask(R.string.task1, R.string.description1, R.bool.task_1_is_done));
-                result.add(new MyTask(R.string.task2, R.string.description2, R.bool.task_2_is_done));
-                result.add(new MyTask(R.string.task3, R.string.description3, R.bool.task_3_is_done));
-                result.add(new MyTask(R.string.task4, R.string.description4, R.bool.task_4_is_done));
-
-
-                mainThreadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onSuccess(result);
-                    }
-                });
-            }
+            mainThreadHandler.post(() -> callback.onSuccess(result));
         });
     }
 
@@ -47,9 +36,17 @@ public class InmemoryTasksRepository implements TasksRepository {
     public void clear(Callback<Void> callback) {
         executor.execute(() -> {
             result.clear();
-            mainThreadHandler.post(()->{
-               callback.onSuccess(null);
-            });
+            mainThreadHandler.post(() -> callback.onSuccess(null));
         });
+    }
+
+    @Override
+    public void add(String title, String description, Boolean isDone, Callback<MyTask> callback) {
+
+        MyTask task = new MyTask(title, description, isDone);
+
+        result.add(task);
+
+        mainThreadHandler.post(() -> callback.onSuccess(task));
     }
 }

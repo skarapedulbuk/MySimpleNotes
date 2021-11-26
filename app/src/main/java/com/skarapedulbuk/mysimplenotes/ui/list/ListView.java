@@ -9,4 +9,6 @@ public interface ListView {
     void showTasks(List<MyTask> tasks);
 
     void clearTasks();
+
+    void addTask(MyTask result);
 }
