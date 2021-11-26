@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
     public void onBindViewHolder(@NonNull TasksAdapter.TasksViewHolder holder, int position) {
         MyTask task = tasks.get(position);
         holder.titleCheckBox.setText(task.getTaskTitle());
+        holder.descriptionTextView.setText(task.getTaskDescription());
     }
 
     @Override
@@ -60,13 +62,17 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
         CheckBox titleCheckBox;
         FloatingActionButton editButton;
+        TextView descriptionTextView;
 
         public TasksViewHolder(@NonNull View itemView) {
             super(itemView);
             titleCheckBox = itemView.findViewById(R.id.checkbox_of_task);
             titleCheckBox.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Item View Click", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Checkbox Click", Toast.LENGTH_SHORT).show();
             });
+
+            descriptionTextView = itemView.findViewById(R.id.description_of_task);
+
 
             editButton = itemView.findViewById(R.id.edit_button);
             editButton.setOnClickListener(v -> {
