@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,7 +132,27 @@ public class ListFragment extends Fragment implements ListView {
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_add) {
                 Toast.makeText(requireContext(), R.string.add_task, Toast.LENGTH_SHORT).show();
-                presenter.add(getString(R.string.task3),getString(R.string.description3), false);
+
+                View detailsHeader = LayoutInflater.from(requireContext()).inflate(R.layout.details_header, null);
+                View detailsView = LayoutInflater.from(requireContext()).inflate(R.layout.details, null);
+
+                CheckBox checkbox = detailsView.findViewById(R.id.task_checkbox);
+                EditText description = detailsView.findViewById(R.id.task_description);
+                EditText title = detailsView.findViewById(R.id.task_title);
+
+                new AlertDialog.Builder(requireContext())
+                        .setCustomTitle(detailsHeader)
+                        .setView(detailsView)
+                        .setIcon(R.drawable.ic_baseline_add_24)
+                        .setPositiveButton(R.string.add_task, (dialog, which) -> {
+                            //   Toast.makeText(requireContext(), title.getText().toString() + description.getText().toString(), Toast.LENGTH_SHORT).show();
+                            presenter.add(title.getText().toString(), description.getText().toString(), checkbox.isChecked());
+                        })
+                        .setNegativeButton(R.string.back, (dialog, which) -> Toast.makeText(requireContext(), R.string.back, Toast.LENGTH_SHORT).show())
+
+                        .setCancelable(false)
+                        .show();
+
                 return true;
             }
             if (item.getItemId() == R.id.action_clear_all) {

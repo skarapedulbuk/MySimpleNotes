@@ -33,4 +33,6 @@
     <string name="undone">Undone</string>
     <string name="done">Done</string>
     <string name="back">Назад</string>
+    <string name="task_title">Заголовок задачи</string>
+
 </resources>
