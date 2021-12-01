@@ -9,4 +9,8 @@ public interface TasksRepository {
 
     void add(String title, String description, Boolean isDone, Callback<MyTask> callback);
 
+    void edit(String id, String title, String description, Boolean isDone, Callback<MyTask> callback);
+
+    void delete(MyTask myTask, Callback<MyTask> callback);
+
 }

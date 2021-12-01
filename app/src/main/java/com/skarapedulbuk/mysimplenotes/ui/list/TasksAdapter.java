@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,21 +19,46 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder> {
+
+    private OnTaskClicked taskClicked;
+    private Fragment fragment;
+    private ArrayList<MyTask> tasks = new ArrayList<>();
+
+    public TasksAdapter(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
+    public int deleteTask(MyTask selectedTask) {
+        int index = tasks.indexOf(selectedTask);
+        tasks.remove(index);
+        return index;
+    }
+
+    public int editTask(MyTask result) {
+        int index = -1;
+
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId().equals(result.getId())) {
+                index = i;
+                break;
+            }
+        }
+
+        tasks.set(index, result);
+        return index;
+    }
+
     public void addTask(MyTask result) {
         tasks.add(result);
     }
 
     interface OnTaskClicked {
-        void onTaskClicked(MyTask task);
+        void onTaskClicked(View itemView, MyTask task);
     }
-
-    private ArrayList<MyTask> tasks = new ArrayList<>();
 
     public void setTaskClicked(OnTaskClicked taskClicked) {
         this.taskClicked = taskClicked;
     }
-
-    private OnTaskClicked taskClicked;
 
     public OnTaskClicked getTaskClicked() {
         return taskClicked;
@@ -78,12 +104,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
             descriptionTextView = itemView.findViewById(R.id.description_of_task);
 
+            fragment.registerForContextMenu(itemView);
 
             editButton = itemView.findViewById(R.id.edit_button);
             editButton.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Edit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "Context menu of edit button", Toast.LENGTH_SHORT).show();
                 if (getTaskClicked() != null) {
-                    getTaskClicked().onTaskClicked(tasks.get(getAdapterPosition()));
+                    getTaskClicked().onTaskClicked(v, tasks.get(getAdapterPosition()));
                 }
 
             });

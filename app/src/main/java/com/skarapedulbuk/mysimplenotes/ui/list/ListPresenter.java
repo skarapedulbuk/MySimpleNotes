@@ -57,4 +57,33 @@ public class ListPresenter {
             }
         });
     }
+
+    public void delete(MyTask selectedTask) {
+        repository.delete(selectedTask, new Callback<MyTask>() {
+            @Override
+            public void onSuccess(MyTask result) {
+                view.deleteTask(selectedTask);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+    }
+
+    public void edit(String title, String description, Boolean isDone, MyTask selectedTask) {
+        repository.edit(selectedTask.getId(), title, description, isDone, new Callback<MyTask>() {
+
+            @Override
+            public void onSuccess(MyTask result) {
+                view.editTask(result);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+    }
 }

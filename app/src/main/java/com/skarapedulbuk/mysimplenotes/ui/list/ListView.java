@@ -11,4 +11,8 @@ public interface ListView {
     void clearTasks();
 
     void addTask(MyTask result);
+
+    void deleteTask(MyTask selectedTask);
+
+    void editTask(MyTask result);
 }

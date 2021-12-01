@@ -1,6 +1,7 @@
 package com.skarapedulbuk.mysimplenotes.ui.list;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.skarapedulbuk.mysimplenotes.R;
-import com.skarapedulbuk.mysimplenotes.domain.InmemoryTasksRepository;
+import com.skarapedulbuk.mysimplenotes.domain.FirebaseRepo;
 import com.skarapedulbuk.mysimplenotes.domain.MyTask;
 import com.skarapedulbuk.mysimplenotes.domain.SettingsStorage;
 import com.skarapedulbuk.mysimplenotes.ui.Drawer;
@@ -42,21 +43,25 @@ public class ListFragment extends Fragment implements ListView {
 
     private TasksAdapter adapter;
 
+    private MyTask selectedTask;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new ListPresenter(this, new InmemoryTasksRepository());
-        adapter = new TasksAdapter();
+        presenter = new ListPresenter(this, new FirebaseRepo());
+        adapter = new TasksAdapter(this);
 
         adapter.setTaskClicked(new TasksAdapter.OnTaskClicked() {
             @Override
-            public void onTaskClicked(MyTask task) {
-                Bundle bundle = new Bundle();
+            public void onTaskClicked(View itemView, MyTask task) {
+                itemView.showContextMenu();
+                selectedTask = task;
+                /*Bundle bundle = new Bundle();
                 bundle.putParcelable(ARG_TASK, task);
 
                 getParentFragmentManager()
-                        .setFragmentResult(KEY_LIST_ACTIVITY, bundle);
+                        .setFragmentResult(KEY_LIST_ACTIVITY, bundle);*/
             }
         });
 
@@ -73,10 +78,6 @@ public class ListFragment extends Fragment implements ListView {
         super.onViewCreated(view, savedInstanceState);
 
         tasksListRoot = view.findViewById(R.id.list_root);
-        /*tasksListRoot.setLayoutManager(new LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false));*/
 
         tasksListRoot.setAdapter(adapter);
 
@@ -97,7 +98,8 @@ public class ListFragment extends Fragment implements ListView {
                 }
         );
 
-        getParentFragmentManager().setFragmentResultListener(ListFragment.KEY_LIST_ACTIVITY,
+        getParentFragmentManager().setFragmentResultListener(
+                ListFragment.KEY_LIST_ACTIVITY,
                 this,
                 new FragmentResultListener() {
                     @Override
@@ -111,6 +113,21 @@ public class ListFragment extends Fragment implements ListView {
                                 .addToBackStack(null)
                                 .commit();
 
+                    }
+                });
+        getParentFragmentManager().setFragmentResultListener(
+                DetailsFragment.KEY_RESULT,
+                getViewLifecycleOwner(),
+                new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+
+                        MyTask selectedTask = result.getParcelable(DetailsFragment.ARG_TASK);
+                        String title = result.getString(DetailsFragment.ARG_TITLE);
+                        String description = result.getString(DetailsFragment.ARG_DESCRIPTION);
+                        Boolean isDone = result.getBoolean(DetailsFragment.ARG_ISDONE);
+
+                        presenter.edit(title, description, isDone, selectedTask);
                     }
                 });
     }
@@ -217,5 +234,43 @@ public class ListFragment extends Fragment implements ListView {
         adapter.notifyItemInserted(adapter.getItemCount() - 1);
 
         tasksListRoot.smoothScrollToPosition(adapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void deleteTask(MyTask selectedTask) {
+        int position = adapter.deleteTask(selectedTask);
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void editTask(MyTask result) {
+        int position = adapter.editTask(result);
+        adapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.menu_details_fragment, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_delete) {
+            presenter.delete(selectedTask);
+            return true;
+        }
+        if (item.getItemId() == R.id.action_save) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ARG_TASK, selectedTask);
+
+            getParentFragmentManager()
+                    .setFragmentResult(KEY_LIST_ACTIVITY, bundle);
+        }
+        if (item.getItemId() == R.id.action_share) {
+            Toast.makeText(this.requireContext(), "Share menu item Click", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }
