@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "86575508645",
+    "project_id": "mysimplenotes-629ab",
+    "storage_bucket": "mysimplenotes-629ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86575508645:android:d0c5ec23be5041f8f9714c",
+        "android_client_info": {
+          "package_name": "com.skarapedulbuk.mysimplenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86575508645-lcl0qcosft7khff12hm3jfntpafscvur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skarapedulbuk.mysimplenotes",
+            "certificate_hash": "bb7643763fc2a22924be3eb024da56a0ab1e5d96"
+          }
+        },
+        {
+          "client_id": "86575508645-71oquakco1o00hjsd2biku5p30d35jbs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiayhh4uJgdpfgFTM87NdwO4tCi_SbhK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86575508645-71oquakco1o00hjsd2biku5p30d35jbs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
