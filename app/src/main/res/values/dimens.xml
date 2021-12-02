@@ -4,6 +4,7 @@
     <dimen name="default_margin">10dp</dimen>
     <dimen name="details_description_text_size">22sp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="checkbox_text_size">28sp</dimen>
+    <dimen name="checkbox_text_size">20sp</dimen>
     <dimen name="button_text_size">24sp</dimen>
+    <dimen name="big_margin">30dp</dimen>
 </resources>

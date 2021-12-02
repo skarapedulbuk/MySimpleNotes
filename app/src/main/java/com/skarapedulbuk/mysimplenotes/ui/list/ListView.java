@@ -7,4 +7,12 @@ import java.util.List;
 
 public interface ListView {
     void showTasks(List<MyTask> tasks);
+
+    void clearTasks();
+
+    void addTask(MyTask result);
+
+    void deleteTask(MyTask selectedTask);
+
+    void editTask(MyTask result);
 }

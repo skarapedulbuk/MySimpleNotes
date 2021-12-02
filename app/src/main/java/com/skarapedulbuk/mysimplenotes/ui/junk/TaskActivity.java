@@ -12,7 +12,7 @@ import com.skarapedulbuk.mysimplenotes.domain.MyTask;
 import com.skarapedulbuk.mysimplenotes.ui.details.DetailsFragment;
 import com.skarapedulbuk.mysimplenotes.ui.list.ListFragment;
 
-public class TaskActivity extends AppCompatActivity implements ListFragment.OnTaskClicked {
+public class TaskActivity extends AppCompatActivity /*implements ListFragment.OnTaskClicked*/ {
     private static final String ARG_TASK = "ARG_TASK";
 
     private MyTask selectedTask;
@@ -77,7 +77,7 @@ public class TaskActivity extends AppCompatActivity implements ListFragment.OnTa
         super.onSaveInstanceState(outState);
     }
 
-    @Override
+   // @Override
     public void onTaskClicked(MyTask task) {
         DetailsFragment detailsFragment = DetailsFragment.newInstance(task);
 
