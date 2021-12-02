@@ -34,5 +34,11 @@
     <string name="done">Done</string>
     <string name="back">Назад</string>
     <string name="task_title">Заголовок задачи</string>
+    <string name="sign_out">Выйти</string>
+    <string name="auth">Сигн ин</string>
+    <string name="exit">Выход</string>
+    <string name="success_auth">Успешная авторизация </string>
+    <string name="earlier_auth">Вы уже ранее авторизованы: </string>
+    <string name="account_exit">Выход из УЗ</string>
 
 </resources>
